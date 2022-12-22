@@ -3,6 +3,7 @@ import { Card, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { AlertMessages } from "../components/Alert";
 import { CustomForm } from "../components/Form";
+import { API_URL } from "../config";
 
 import { AuthContext } from "../context/AuthContext";
 
@@ -43,7 +44,7 @@ export const LogIn = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:8080/auth/login", {
+    const response = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

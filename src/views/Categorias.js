@@ -6,6 +6,8 @@ import { CustomForm } from "../components/Form";
 import { AlertMessages } from "../components/Alert";
 import { AuthContext } from "../context/AuthContext";
 
+import { API_URL } from "../config";
+
 export const Categorias = () => {
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -39,7 +41,7 @@ export const Categorias = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const URL = "http://localhost:8080/categorias" + (_id ? `/${_id}` : "");
+    const URL = API_URL+"/categorias" + (_id ? `/${_id}` : "");
     const response = await fetch(URL, {
       method: _id ? "PATCH" : "POST",
       headers: {
@@ -55,7 +57,7 @@ export const Categorias = () => {
   };
 
   const updateCategoria = async (id) => {
-    const response = await fetch(`http://localhost:8080/categorias/${id}`);
+    const response = await fetch(`${API_URL}/categorias/${id}`);
     const data = await response.json();
     setId(data._id);
     setCategoria(data);
@@ -63,7 +65,7 @@ export const Categorias = () => {
   };
 
   const deleteCategoria = async (id) => {
-    const response = await fetch(`http://localhost:8080/categorias/${id}`, {
+    const response = await fetch(`${API_URL}/categorias/${id}`, {
       method: "DELETE",
     });
     const { message } = await response.json();
@@ -90,7 +92,7 @@ export const Categorias = () => {
   useEffect(() => {
     (async () => {
       const getCategorias = async () => {
-        const response = await fetch("http://localhost:8080/categorias");
+        const response = await fetch(`${API_URL}/categorias`);
         const data = await response.json();
         setCategorias(data);
       };

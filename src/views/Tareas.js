@@ -5,6 +5,7 @@ import { CustomForm } from "../components/Form";
 import { AlertMessages } from "../components/Alert";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 export const Tareas = () => {
   const { token } = useContext(AuthContext);
@@ -73,7 +74,7 @@ export const Tareas = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const URL = "http://localhost:8080/tareas" + (_id ? `/${_id}` : "");
+    const URL = API_URL+"/tareas" + (_id ? `/${_id}` : "");
     const response = await fetch(URL, {
       method: _id ? "PATCH" : "POST",
       headers: {
@@ -89,7 +90,7 @@ export const Tareas = () => {
   };
 
   const updateTarea = async (id) => {
-    const response = await fetch(`http://localhost:8080/tareas/${id}`);
+    const response = await fetch(`${API_URL}/tareas/${id}`);
     const data = await response.json();
     setId(data._id);
     setTarea(data);
@@ -97,7 +98,7 @@ export const Tareas = () => {
   };
 
   const deleteTarea = async (id) => {
-    const response = await fetch(`http://localhost:8080/tareas/${id}`, {
+    const response = await fetch(`${API_URL}/tareas/${id}`, {
       method: "DELETE",
     });
     const { message } = await response.json();
@@ -124,13 +125,13 @@ export const Tareas = () => {
   useEffect(() => {
     (async () => {
       const getTareas = async () => {
-        const response = await fetch("http://localhost:8080/tareas");
+        const response = await fetch(`${API_URL}/tareas`);
         const data = await response.json();
         setTareas(data);
       };
       await getTareas();
       const getCategorias = async () => {
-        const response = await fetch("http://localhost:8080/categorias");
+        const response = await fetch(`${API_URL}/categorias`);
         const data = await response.json();
         setCategorias(data);
       };
