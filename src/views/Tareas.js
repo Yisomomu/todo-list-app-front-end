@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { CustomModal } from "../components/Modal";
 import { CustomForm } from "../components/Form";
 import { AlertMessages } from "../components/Alert";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export const Tareas = () => {
+  const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [_id, setId] = useState(null);
   const [tareas, setTareas] = useState([]);
   const [tarea, setTarea] = useState({
@@ -107,6 +112,14 @@ export const Tareas = () => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    (() => {
+      if (!token) {
+        return navigate("/");
+      }
+    })();
+  });
 
   useEffect(() => {
     (async () => {

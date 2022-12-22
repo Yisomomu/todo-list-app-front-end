@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import logo from "./../logo.svg";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 export const NavBar = () => {
+  const { token, logout } = useContext(AuthContext);
+
   return (
     <Navbar bg="dark" variant="dark" expand="md">
       <Container fluid>
@@ -26,13 +30,31 @@ export const NavBar = () => {
             <Nav.Link as={Link} to="/">
               Inicio
             </Nav.Link>
-            <Nav.Link as={Link} to="/categorias">
-              Categorias
-            </Nav.Link>
-            <Nav.Link as={Link} to="/tareas">
-              Tareas
-            </Nav.Link>
+            {token ? (
+              <>
+                <Nav.Link as={Link} to="/categorias">
+                  Categorias
+                </Nav.Link>
+                <Nav.Link as={Link} to="/tareas">
+                  Tareas
+                </Nav.Link>
+              </>
+            ) : (
+              <>
+                <Nav.Link as={Link} to="/login">
+                  Iniciar Sesión
+                </Nav.Link>
+                <Nav.Link as={Link} to="/signup">
+                  Registrarse
+                </Nav.Link>
+              </>
+            )}
           </Nav>
+          {token && (
+            <Button variant="secondary" onClick={logout}>
+              Cerrar Sesión
+            </Button>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>

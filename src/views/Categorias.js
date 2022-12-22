@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Table } from "react-bootstrap";
 import { CustomModal } from "../components/Modal";
 import { CustomForm } from "../components/Form";
 import { AlertMessages } from "../components/Alert";
+import { AuthContext } from "../context/AuthContext";
 
 export const Categorias = () => {
+  const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [_id, setId] = useState(null);
   const [categorias, setCategorias] = useState([]);
   const [categoria, setCategoria] = useState({
@@ -73,6 +78,14 @@ export const Categorias = () => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    (() => {
+      if (!token) {
+        navigate("/");
+      }
+    })();
+  });
 
   useEffect(() => {
     (async () => {

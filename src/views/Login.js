@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Card, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AlertMessages } from "../components/Alert";
 import { CustomForm } from "../components/Form";
 
+import { AuthContext } from "../context/AuthContext";
+
 export const LogIn = () => {
+  const { token, setCookie } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [usuario, setUsuario] = useState({
     email: "",
     password: "",
@@ -45,9 +50,26 @@ export const LogIn = () => {
       },
       body: JSON.stringify({ usuario }),
     });
-    const { message } = await response.json();
-    setMessage(message);
+    const { message, token } = await response.json();
+    if (message !== "Bienvenido") {
+      setMessage(message);
+      return;
+    }
+    setCookie("token", token, { path: "/", maxAge: 7 * 24 * 60 * 60 });
+    redirectHome();
   };
+
+  const redirectHome = () => {
+    navigate("/");
+  };
+
+  useEffect(() => {
+    (() => {
+      if (token) {
+        redirectHome();
+      }
+    })();
+  });
 
   return (
     <Container
@@ -73,6 +95,7 @@ export const LogIn = () => {
             inputs={inputs}
             onChange={handleChange}
             onSubmit={onSubmit}
+            buttonText="Iniciar Sesión"
           />
         </Card.Body>
         <Card.Footer className="d-flex justify-content-center">

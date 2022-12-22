@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Card, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AlertMessages } from "../components/Alert";
 import { CustomForm } from "../components/Form";
+import { AuthContext } from "../context/AuthContext";
 
 export const SignUp = () => {
+  const { token, setCookie } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [usuario, setUsuario] = useState({
     nombres: "",
     apellidos: "",
@@ -61,9 +65,28 @@ export const SignUp = () => {
       },
       body: JSON.stringify({ usuario }),
     });
-    const { message } = await response.json();
-    setMessage(message);
+    const { message, token } = await response.json();
+    if (message !== "Usuario creado") {
+      setMessage(message);
+      return;
+    }
+    if (token) {
+      setCookie("token", token, { path: "/", maxAge: 7 * 24 * 60 * 60 });
+      redirectHome();
+    }
   };
+
+  const redirectHome = () => {
+    navigate("/");
+  };
+
+  useEffect(() => {
+    (() => {
+      if (token) {
+        redirectHome();
+      }
+    })();
+  });
 
   return (
     <Container
@@ -89,6 +112,7 @@ export const SignUp = () => {
             inputs={inputs}
             onChange={handleChange}
             onSubmit={onSubmit}
+            submitText="Registrarse"
           />
         </Card.Body>
         <Card.Footer className="d-flex justify-content-center">

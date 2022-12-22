@@ -1,6 +1,11 @@
 import { Form, FloatingLabel, Button } from "react-bootstrap";
 
-export const CustomForm = ({ inputs, onSubmit, onChange }) => {
+export const CustomForm = ({
+  inputs,
+  onSubmit,
+  onChange,
+  buttonText = "Guardar",
+}) => {
   return (
     <Form
       style={{
@@ -40,7 +45,7 @@ export const CustomForm = ({ inputs, onSubmit, onChange }) => {
         </FloatingLabel>
       ))}
       <Button variant="primary" type="submit">
-        Guardar
+        {buttonText}
       </Button>
     </Form>
   );
